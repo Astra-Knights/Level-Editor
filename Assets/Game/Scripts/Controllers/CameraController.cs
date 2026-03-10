@@ -14,6 +14,9 @@ public class CameraController : MonoBehaviour
     [SerializeField]
     private float maxZoom = 24f;
 
+    [SerializeField]
+    private GameObject block;
+
     private Vector3 lastMousePos;
     private float zoomTargetY;
 
