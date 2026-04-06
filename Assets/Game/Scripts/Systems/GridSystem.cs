@@ -18,18 +18,7 @@ public class GridSystem : MonoBehaviour
         CreateGrid();
     }
 
-    private void Start()
-    {
-        RenderGrid();
-    }
-
-    private void OnValidate()
-    {
-        CreateGrid();
-        RenderGrid();
-    }
-
-    void CreateGrid()
+    private void CreateGrid()
     {
         grid = new GridCell[width, height];
 
@@ -42,36 +31,16 @@ public class GridSystem : MonoBehaviour
         }
     }
 
-    void RenderGrid()
-    {
-        foreach (Transform child in transform)
-        {
-            DestroyImmediate(child.gameObject);
-        }
-
-        for (int x = 0; x <= grid.GetLength(0); x++)
-        {
-            Vector3 start = new Vector3(x * cellSize, 0, 0);
-            Vector3 end = new Vector3(x * cellSize, 0, grid.GetLength(1) * cellSize);
-            Utils.DrawLine(start, end, transform);
-        }
-
-        for (int z = 0; z <= grid.GetLength(1); z++)
-        {
-            Vector3 start = new Vector3(0, 0, z * cellSize);
-            Vector3 end = new Vector3(grid.GetLength(0) * cellSize, 0, z * cellSize);
-            Utils.DrawLine(start, end, transform);
-        }
-    }
-
     public void PlaceBlock(GameObject prefab, int x, int z)
     {
+        if (x < 0 || x >= width || z < 0 || z >= height) return;
+
         GridCell cell = grid[x, z];
 
         if (!cell.IsEmpty()) return;
 
         Vector3 pos = GridToWorld(x, z);
-        GameObject block = Instantiate(prefab, pos, Quaternion.identity);
+        GameObject block = Instantiate(prefab, pos, Quaternion.identity, transform);
 
         cell.block = block;
     }
